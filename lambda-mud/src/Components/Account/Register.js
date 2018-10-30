@@ -76,10 +76,10 @@ class Register extends Component {
         });
     }
 
-    submitHandler = async (event) => {
+    submitHandler = async (event, user) => {
         event.preventDefault();
         try {
-            const response = await axios.post('https://lambdamud-dasma.herokuapp.com/api/registration', this.state);
+            const response = await axios.post('https://lambdamud-dasma.herokuapp.com/api/registration', user);
             const token = response.data.key;
             localStorage.setItem('key', token);
             this.props.history.push('/mud');
@@ -121,7 +121,7 @@ class Register extends Component {
 
                 
                     <Button type="submit">Register</Button>
-                    <Text>Already have an account? {LinkToLogin}</Text>
+                    <Text>Already have an account? {LinkToLogin} </Text>
                 
             </Form>
          );
