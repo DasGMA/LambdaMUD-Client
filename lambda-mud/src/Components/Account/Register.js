@@ -63,7 +63,7 @@ class Register extends Component {
     componentDidMount() {
         const token = localStorage.getItem('key');
         if (token) {
-            this.props.history.replace('/mud')
+            this.props.history.replace('/')
         }
     }
 
@@ -82,7 +82,7 @@ class Register extends Component {
             const response = await axios.post('https://lambdamud-dasma.herokuapp.com/api/registration', user);
             const token = response.data.key;
             localStorage.setItem('key', token);
-            this.props.history.push('/mud');
+            window.location.reload();
         } catch (error) {
             console.log(error.response);
         }

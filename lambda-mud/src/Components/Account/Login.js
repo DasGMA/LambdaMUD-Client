@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import Mud from '../Main/Mud';
 
 const Form = styled.form`
     display: flex;
@@ -56,15 +55,14 @@ class Login extends Component {
             user: {
                 username: '',
                 password: '',
-                authorized: false
             }
-         }
+        }
     }
 
     componentDidMount() {
         const token = localStorage.getItem('key');
         if (token) {
-            this.props.history.replace('/mud')
+            this.props.history.replace('/home')
         }
     }
 
@@ -81,42 +79,41 @@ class Login extends Component {
             const response = await axios.post('https://lambdamud-dasma.herokuapp.com/api/login', user);
             const token = response.data.key;
             localStorage.setItem('key', token);
-            this.setState({ authorized: true})
+            window.location.reload();
         } catch (error) {
             console.log(error.response, 'Something went wrong.')
         }
     }
 
+
     render() { 
         const LinkToRegister = <Link to='/register'>Register</Link>
-        const LoginForm =   <Form className="login" onSubmit={(event) => this.submitHandler(event, this.state.user)}>
-                                <Input
-                                    name="username"
-                                    type="text"
-                                    placeholder="Username"
-                                    value={this.state.username}
-                                    required
-                                    onChange={this.changeHandler}
-                                />
+        return ( 
+            <Form onSubmit={(event) => this.submitHandler(event, this.state.user)}>
+                <Input
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                    value={this.state.username}
+                    required
+                    onChange={this.changeHandler}
+                />
 
-                                <Input
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={this.state.password}
-                                    required
-                                    onChange={this.changeHandler}
-                                />
+                <Input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    required
+                    onChange={this.changeHandler}
+                />
 
                                 
-                                    <Button type="submit">Login</Button>
-                                    <Text>Don't have an account? {LinkToRegister}</Text>
+                <Button type="submit">Login</Button>
+                <Text>Don't have an account? {LinkToRegister}</Text>
                                     
-                            </Form>
-        return ( 
-            this.state.authorized ? <Mud /> : LoginForm
+            </Form>
          );
     }
 }
- 
 export default Login;

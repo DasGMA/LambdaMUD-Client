@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import {Route} from 'react-router-dom';
+import {Container} from 'reactstrap';
 import Register from '../Account/Register';
 import Login from '../Account/Login';
-import Mud from '../Main/Mud';
-
-
+import Home from '../Main/Home';
+import Hello from '../Main/Hello';
 
 class App extends Component {
   render() {
     return (
-      <div className='App'>
-      
-        <Route exact path='/login' component={Login} />
+      <Container>
+        <Route exact path='/' component={Hello} />
+        <Route path='/home' component={Home} />
+        <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
-        <Route path='/mud' component={Mud} />
-        
-      </div>
+      </Container>
     );
   }
 }
