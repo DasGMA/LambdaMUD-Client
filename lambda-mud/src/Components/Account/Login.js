@@ -1,52 +1,29 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import axios from 'axios';
+import { Container, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    height: 300px;
-    width: 100%;
-    margin: 100px auto 0 auto;
-    border: 1px solid silver;
-    border-radius: 5px;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.1);
-`
-const Input = styled.input`
-    margin: 5px 0;
-    height: 30px;
-    max-width: 200px;
-    padding-left: 10px;
-    border-radius: 5px;
-`
-const Text = styled.p`
-    >   a {
-        text-decoration: none;
-        color: #f4511e;
+const styles = {
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '300px',
+        width: '100%',
+        height: '300px',
+        margin: '100px auto 0 auto',
+        padding: '5px',
+        border: '1px solid silver',
+        borderRadius: '5px',
+        justifyContent: 'center',
+        alignItems:' center',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    link: {
+        textDecoration: 'none',
+        color: '#f4511e',
     }
-`
-const Button = styled.button`
-    
-    display: inline-block;
-    border-radius: 4px;
-    background-color: rgba(244, 81, 30, 1);
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 18px;
-    padding: 10px;
-    width: 100px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 10px;
-    :hover {
-        background-color: rgba(244, 81, 30, 0.7);
-    }
-`
+}
+
 
 class Login extends Component {
     constructor(props) {
@@ -87,32 +64,39 @@ class Login extends Component {
 
 
     render() { 
-        const LinkToRegister = <Link to='/register'>Register</Link>
-        return ( 
-            <Form onSubmit={(event) => this.submitHandler(event, this.state.user)}>
-                <Input
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    value={this.state.username}
-                    required
-                    onChange={this.changeHandler}
-                />
-
-                <Input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    required
-                    onChange={this.changeHandler}
-                />
-
-                                
-                <Button type="submit">Login</Button>
-                <Text>Don't have an account? {LinkToRegister}</Text>
-                                    
-            </Form>
+        const LinkToRegister = <Link to='/register' style={styles.link}>Register</Link>
+        return (
+            <Container className="App" onSubmit={(event) => this.submitHandler(event, this.state.user)}>
+                <Form className="form" style={styles.form}>
+                <h2>Login</h2>
+                <Col>
+                    <FormGroup>
+                    <Label>Username</Label>
+                    <Input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Username"
+                        value={this.state.username}
+                        onChange={this.changeHandler}
+                    />
+                    </FormGroup>
+                    <FormGroup>
+                    <Label for="examplePassword">Password</Label>
+                    <Input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="********"
+                        value={this.state.password}
+                        onChange={this.changeHandler}
+                    />
+                    </FormGroup>
+                </Col>
+                <Button type='submit'>Login</Button>
+                <p className='text-muted' style={{fontSize: '0.7rem'}}>Don't have an account? {LinkToRegister}</p>
+                </Form>
+            </Container> 
          );
     }
 }

@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Pusher from 'pusher-js';
 import {setPusherClient} from 'react-pusher';
-import {Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert} from 'reactstrap';
+import {Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Card, Container, Form} from 'reactstrap';
 import Message from './Message';
 
-//, secret='811469b470f2e5482ac3'
-// '6865d3c825fc73daee61'
+// secret = '811469b470f2e5482ac3'
+// key = '6865d3c825fc73daee61'
 Pusher.logToConsole = true;
 
-const pusherClient = new Pusher('6865d3c825fc73daee61', {cluster:'US2', forceTLS:true});
+const pusherClient = new Pusher('6865d3c825fc73daee61',
+                                {cluster:'US2', forceTLS:true}
+                                );
 
 setPusherClient(pusherClient);
 
@@ -19,7 +21,7 @@ class Mud extends Component {
     state = {
         title: '',
         description: '',
-        players: '',
+        players: [],
         messages: '',
         allMessages: []
     }
@@ -35,11 +37,11 @@ class Mud extends Component {
 
         axios.get(`${url}api/adv/init`, header)
         .then(response => {
-            this.setState({title: response.data.title, description: response.data.description});
+            this.setState({title: response.data.title, description: response.data.description, players: response.data.players});
             const channel = pusherClient.subscribe('p-channel-' + response.data.uuid);
             channel.bind('broadcast', data => {
-                let newMessage = this.state.allMessages.slice();
-                newMessage.push({name: data.name, message: data.message});
+                let newMessage = [...this.state.allMessages];
+                newMessage.unshift({name: data.name, message: data.message});
                 this.setState({allMessages: newMessage});
             });
         })
@@ -55,40 +57,41 @@ class Mud extends Component {
             'Authorization': key,
             'Content-Type': 'application/json'
         }};
-            let moving = this.state.messages[0].toLowerCase();
-            const direction = {direction: moving};
-            console.log(direction)
-            axios.post(`${url}api/adv/move`, direction, header)
+        
+        let moving = this.state.messages[0].toLowerCase();
+        const direction = {direction: moving};
+        axios.post(`${url}api/adv/move`, direction, header)
             .then(response => {
                 this.setState({
                     title: response.data.title,
                     description: response.data.description,
+                    players: response.data.players,
                     messages: ''
                 });
+                console.log(response.data.players)
             })
             .catch(error => {
                 console.log(error.response);
             });
-        } 
+        }
 
-        Messaging = (event) => {
-            event.preventDefault();
-            let key = 'Token ' + localStorage.getItem('key');
-            let header = { headers: {
-                'Authorization': key,
-                'Content-Type': 'application/json'
-            }};
-            let message = {
-                message: this.state.messages
-            }
-            console.log(message)
-            axios.post(`${url}api/adv/say`, message, header)
+    Messaging = (event) => {
+        event.preventDefault();
+        let key = 'Token ' + localStorage.getItem('key');
+        let header = { headers: {
+            'Authorization': key,
+            'Content-Type': 'application/json'
+        }};
+        let message = {
+            message: this.state.messages
+        }
+        axios.post(`${url}api/adv/say`, message, header)
             .then(response => {
-                let pastMessages = this.state.allMessages.slice();
-                pastMessages.push(response.data);
-                console.log("response.data is:", response.data);
+                const allMessages = [...this.state.allMessages];
+                allMessages.unshift(response.data);
+                console.log(response.data)
                 this.setState({
-                    allMessages: pastMessages, messages: ''
+                    allMessages: allMessages, messages: ''
                 });
             })
             .catch(error => {
@@ -96,8 +99,8 @@ class Mud extends Component {
             });
         }
 
-        Input = (event) => {
-            let move = this.state.messages;
+    Input = (event) => {
+        let move = this.state.messages;
             if (
                 move === 'north' ||
                 move === 'east' ||
@@ -113,16 +116,19 @@ class Mud extends Component {
             } else {
                 this.Messaging(event)
             }
-        };
+    };
     
     render() {
+        const allMessages = this.state.allMessages;
         return (
-            <Jumbotron>
-                <div className = 'game'>
+            <Jumbotron style={{marginTop: '10px'}}>
+                
                     <Alert color='success'><h2>{this.state.title}</h2></Alert>
                     <Alert color='info'><h3>{this.state.description}</h3></Alert>
-                        <InputGroup  >
-                            <InputGroupAddon addonType='prepend'>Action</InputGroupAddon>
+
+                        <Form onSubmit={this.Input}>
+                        <InputGroup >
+                            <InputGroupAddon addonType='prepend'>Actions</InputGroupAddon>
                                 <Input
                                     type = 'text'
                                     placeholder = 'Commands'
@@ -130,22 +136,22 @@ class Mud extends Component {
                                     value = {this.state.messages}
                                     onChange = {this.inputChangeHandler}
                                 />
-                                <Button color = 'primary' onClick = {this.Input} >Post</Button>
+                                <Button color='primary'>Post</Button>
                         </InputGroup>
-                        <div className='messages'>
-                            <h1>Messages</h1>
-                            <div>
-                                {this.state.allMessages ? (
+                        </Form>
+                        <Container style={{marginTop: '15px'}}>
+                            <h4>Messages</h4>
+                            <Card style={{maxHeight:'200px', minHeight: '50px', overflow:'auto', padding: '5px'}}>
+                                {allMessages? (
                                     <div>
-                                    {this.state.allMessages.map((message, index) => (
+                                    {allMessages.map((message, index) => (
+                                        
                                         <Message key={index} message={message}/>
                                     ))}
                                     </div>
                                 ) : null}
-                            </div>
-
-                    </div>
-                </div>
+                            </Card>
+                        </Container>
             </Jumbotron>
         );
     }

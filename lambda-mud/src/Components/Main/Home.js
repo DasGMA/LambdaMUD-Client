@@ -40,16 +40,6 @@ class Home extends Component {
 
 
     render() {
-        let loggedOut = <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/login">Login</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/register">Register</NavLink>
-                                </NavItem>
-                            </Nav>
-                        </Collapse>
         let loggedIn =  <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
@@ -63,7 +53,7 @@ class Home extends Component {
                 <Navbar color="light" light expand="md">
                 <NavbarBrand href="/home">MUD-DY</NavbarBrand>
                 <NavbarToggler onClick={this.toggle} />
-                {this.state.authorized ? loggedIn : loggedOut}
+                {this.state.authorized ? loggedIn : null}
                 </Navbar>
                 {this.state.authorized ? <Mud /> : null}
             </div>

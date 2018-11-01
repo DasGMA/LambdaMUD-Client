@@ -1,34 +1,30 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import axios from 'axios';
+import { Container, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    height: 300px;
-    width: 100%;
-    margin: 100px auto 0 auto;
-    border: 1px solid silver;
-    border-radius: 5px;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.1);
-`
-const Input = styled.input`
-    margin: 5px 0;
-    height: 30px;
-    max-width: 200px;
-    padding-left: 10px;
-    border-radius: 5px;
-`
-const Text = styled.p`
-    >   a {
-        text-decoration: none;
-        color: #f4511e;
+const styles = {
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '300px',
+        width: '100%',
+        height: '375px',
+        margin: '100px auto 0 auto',
+        padding: '5px',
+        border: '1px solid silver',
+        borderRadius: '5px',
+        justifyContent: 'center',
+        alignItems:' center',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    link: {
+        textDecoration: 'none',
+        color: '#f4511e',
     }
-`
+}
+/*
+
 const Button = styled.button`
     
     display: inline-block;
@@ -46,7 +42,7 @@ const Button = styled.button`
     :hover {
         background-color: rgba(244, 81, 30, 0.7);
     }
-`
+` */
 
 class Register extends Component {
     constructor(props) {
@@ -90,40 +86,52 @@ class Register extends Component {
 
 
     render() { 
-        const LinkToLogin = <Link to='/login'>Login</Link>
-        return ( 
-            <Form className="login-form" onSubmit={(e) => this.submitHandler(e, this.state.user)}>
-                <Input
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    value={this.state.username}
-                    required
-                    onChange={this.changeHandler}
-                />
-
-                <Input
-                    name="password1"
-                    type="password"
-                    placeholder="Enter Password"
-                    value={this.state.password1}
-                    required
-                    onChange={this.changeHandler}
-                />
-                <Input
-                    name="password2"
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={this.state.password2}
-                    required
-                    onChange={this.changeHandler}
-                />
-
+        const LinkToLogin = <Link to='/login' style={styles.link}>Login</Link>
+        return (
+            <Container className="App" onSubmit={(event) => this.submitHandler(event, this.state.user)}>
+                <Form className="form" style={styles.form}>
+                <h2>Register</h2>
+                <Col>
+                    <FormGroup>
+                    <Label>Username</Label>
+                    <Input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Username"
+                        value={this.state.username}
+                        onChange={this.changeHandler}
+                    />
+                    </FormGroup>
                 
-                    <Button type="submit">Register</Button>
-                    <Text>Already have an account? {LinkToLogin} </Text>
+                    <FormGroup>
+                    <Label for="examplePassword">Password</Label>
+                    <Input
+                        type="password"
+                        name="password1"
+                        id="password1"
+                        placeholder="********"
+                        value={this.state.password1}
+                        onChange={this.changeHandler}
+                    />
+                    </FormGroup>
                 
-            </Form>
+                    <FormGroup>
+                    <Label for="examplePassword">Verify Password</Label>
+                    <Input
+                        type="password"
+                        name="password2"
+                        id="password2"
+                        placeholder="Enter your password again"
+                        value={this.state.password2}
+                        onChange={this.changeHandler}
+                    />
+                    </FormGroup>
+                </Col>
+                <Button type='submit'>Register</Button>
+                <p className='text-muted' style={{fontSize: '0.7rem'}}>Have an account? {LinkToLogin}</p>
+                </Form>
+            </Container> 
          );
     }
 }
