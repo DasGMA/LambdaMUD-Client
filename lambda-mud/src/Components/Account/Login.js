@@ -9,14 +9,14 @@ const styles = {
         flexDirection: 'column',
         maxWidth: '300px',
         width: '100%',
-        height: '300px',
+        minHeight: '320px',
         margin: '100px auto 0 auto',
         padding: '5px',
         border: '1px solid silver',
         borderRadius: '5px',
         justifyContent: 'center',
         alignItems:' center',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     link: {
         textDecoration: 'none',
@@ -39,7 +39,7 @@ class Login extends Component {
     componentDidMount() {
         const token = localStorage.getItem('key');
         if (token) {
-            this.props.history.replace('/home')
+            this.props.history.replace('/mud')
         }
     }
 
@@ -68,10 +68,10 @@ class Login extends Component {
         return (
             <Container className="App" onSubmit={(event) => this.submitHandler(event, this.state.user)}>
                 <Form className="form" style={styles.form}>
-                <h2>Login</h2>
+                <h2 style={{color: '#183e2c'}}>Login</h2>
                 <Col>
                     <FormGroup>
-                    <Label>Username</Label>
+                    <Label style={{color: '#183e2c'}}>Username</Label>
                     <Input
                         type="text"
                         name="username"
@@ -82,7 +82,7 @@ class Login extends Component {
                     />
                     </FormGroup>
                     <FormGroup>
-                    <Label for="examplePassword">Password</Label>
+                    <Label style={{color: '#183e2c'}}>Password</Label>
                     <Input
                         type="password"
                         name="password"
@@ -93,8 +93,8 @@ class Login extends Component {
                     />
                     </FormGroup>
                 </Col>
-                <Button type='submit'>Login</Button>
-                <p className='text-muted' style={{fontSize: '0.7rem'}}>Don't have an account? {LinkToRegister}</p>
+                <Button style = {{margin: '10px'}} type='submit' block>Login</Button>
+                <p className='text-dark' style={{fontSize: '0.7rem'}}>Don't have an account? {LinkToRegister}</p>
                 </Form>
             </Container> 
          );

@@ -8,14 +8,13 @@ import {
     NavItem,
     NavLink
  } from 'reactstrap';
-import Mud from './Mud';
 
-class Home extends Component {
+class Navigation extends Component {
     constructor(props) {
         super(props);
         this.state = {
           isOpen: false,
-          authorized: false
+          authorized: false,
         };
     }
 
@@ -43,22 +42,24 @@ class Home extends Component {
         let loggedIn =  <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink href='#' onClick={this.handleLogout} >Logout</NavLink>
+                                    <NavLink style={{color: 'white'}} disabled href='#' >{this.props.name}</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink style={{color: 'white'}} href='#' onClick={this.handleLogout} >Logout</NavLink>
                                 </NavItem>
                             </Nav>
                         </Collapse>
         
         return (
             <div>
-                <Navbar color="light" light expand="md">
-                <NavbarBrand href="/home">MUD-DY</NavbarBrand>
+                <Navbar style={{backgroundColor: 'rgba(255, 255, 255, 0.5)'}} color="dark" dark expand="md">
+                <NavbarBrand style={{color: 'white'}} href="/home">MUD-DY</NavbarBrand>                
                 <NavbarToggler onClick={this.toggle} />
                 {this.state.authorized ? loggedIn : null}
                 </Navbar>
-                {this.state.authorized ? <Mud /> : null}
             </div>
         );
     }
 }
 
-export default Home;
+export default Navigation;

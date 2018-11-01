@@ -9,40 +9,20 @@ const styles = {
         flexDirection: 'column',
         maxWidth: '300px',
         width: '100%',
-        height: '375px',
+        minHeight: '400px',
         margin: '100px auto 0 auto',
         padding: '5px',
         border: '1px solid silver',
         borderRadius: '5px',
         justifyContent: 'center',
         alignItems:' center',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     link: {
         textDecoration: 'none',
         color: '#f4511e',
     }
 }
-/*
-
-const Button = styled.button`
-    
-    display: inline-block;
-    border-radius: 4px;
-    background-color: rgba(244, 81, 30, 1);
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 18px;
-    padding: 10px;
-    width: 100px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 10px;
-    :hover {
-        background-color: rgba(244, 81, 30, 0.7);
-    }
-` */
 
 class Register extends Component {
     constructor(props) {
@@ -59,7 +39,7 @@ class Register extends Component {
     componentDidMount() {
         const token = localStorage.getItem('key');
         if (token) {
-            this.props.history.replace('/')
+            this.props.history.replace('/mud')
         }
     }
 
@@ -90,10 +70,10 @@ class Register extends Component {
         return (
             <Container className="App" onSubmit={(event) => this.submitHandler(event, this.state.user)}>
                 <Form className="form" style={styles.form}>
-                <h2>Register</h2>
+                <h2 style={{color: '#183e2c'}}>Register</h2>
                 <Col>
                     <FormGroup>
-                    <Label>Username</Label>
+                    <Label style={{color: '#183e2c'}}>Username</Label>
                     <Input
                         type="text"
                         name="username"
@@ -105,7 +85,7 @@ class Register extends Component {
                     </FormGroup>
                 
                     <FormGroup>
-                    <Label for="examplePassword">Password</Label>
+                    <Label style={{color: '#183e2c'}}>Password</Label>
                     <Input
                         type="password"
                         name="password1"
@@ -117,7 +97,7 @@ class Register extends Component {
                     </FormGroup>
                 
                     <FormGroup>
-                    <Label for="examplePassword">Verify Password</Label>
+                    <Label style={{color: '#183e2c'}}>Verify Password</Label>
                     <Input
                         type="password"
                         name="password2"
@@ -128,8 +108,8 @@ class Register extends Component {
                     />
                     </FormGroup>
                 </Col>
-                <Button type='submit'>Register</Button>
-                <p className='text-muted' style={{fontSize: '0.7rem'}}>Have an account? {LinkToLogin}</p>
+                <Button style = {{margin: '10px'}} type='submit' block>Register</Button>
+                <p className='text-dark' style={{fontSize: '0.7rem'}}>Have an account? {LinkToLogin}</p>
                 </Form>
             </Container> 
          );

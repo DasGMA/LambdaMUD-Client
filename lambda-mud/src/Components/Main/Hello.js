@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Container, Jumbotron, Alert} from 'reactstrap';
+import {Container, Jumbotron, Alert, Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
 
 const styles = {
@@ -7,11 +7,29 @@ const styles = {
         height: '500px',
         marginTop: '100px',
         display: 'flex',
+        border: '1px solid silver',
+        borderRadius: '5px',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    },
+    alert: {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    button: {
+        width: '100px',
+        margin: '10px',
+        display: 'block'
+
     }
+
 }
 
 class Hello extends Component {
@@ -20,12 +38,10 @@ class Hello extends Component {
         return (
             <Container>
                 <Jumbotron style={styles.jumbo}>
-                    <Alert color='dark'><h2>Welcome to MUD-DY!</h2>
-                        <br/>
-                    <Link to='/login' style={{textDecoration: 'none'}}><h3 className='text-success'>Login</h3></Link>
-                    <Link to='/register' style={{textDecoration: 'none'}}><h3 className='text-danger'>Register</h3></Link>
+                    <Alert style={styles.alert} color='dark'><h2 style={{color: '#183e2c'}}>Welcome to MUD-DY adventures!</h2>
+                    <Button style={styles.button}><Link style={{color: 'inherit', textDecoration: 'none'}} to='/login'>Login</Link></Button>
+                    <Button style={styles.button}><Link style={{color: 'inherit', textDecoration: 'none'}} to='/register'>Register</Link></Button>
                     </Alert>
-                    
                 </Jumbotron>
             </Container>
         );

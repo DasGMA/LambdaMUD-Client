@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Pusher from 'pusher-js';
 import {setPusherClient} from 'react-pusher';
-import {Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Card, Container, Form} from 'reactstrap';
+import {Label, Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Card, Container, Form} from 'reactstrap';
 import Message from './Message';
+import Navigation from './Navigation';
 
 // secret = '811469b470f2e5482ac3'
 // key = '6865d3c825fc73daee61'
@@ -22,8 +23,10 @@ class Mud extends Component {
         title: '',
         description: '',
         players: [],
+        allPlayers: [],
         messages: '',
-        allMessages: []
+        allMessages: [],
+        data: []
     }
 
     inputChangeHandler = event => {
@@ -31,18 +34,33 @@ class Mud extends Component {
     };
 
     componentDidMount() {
-
         let key = 'Token ' + localStorage.getItem('key');
         const header = { headers: {'Authorization': key} };
 
         axios.get(`${url}api/adv/init`, header)
         .then(response => {
-            this.setState({title: response.data.title, description: response.data.description, players: response.data.players});
+            this.setState({
+                title: response.data.title,
+                description: response.data.description,
+                players: response.data.players,
+                data: response.data
+            });
             const channel = pusherClient.subscribe('p-channel-' + response.data.uuid);
             channel.bind('broadcast', data => {
+                const player = [...this.state.players];
+                const test = data.message.split(' ');
+                if (test[2] === 'entered'){
+                    player.push(test[0])
+                } else if (test[2] === 'walked'){
+                    player.pop(player.indexOf(test[0]))
+                }
+
                 let newMessage = [...this.state.allMessages];
                 newMessage.unshift({name: data.name, message: data.message});
-                this.setState({allMessages: newMessage});
+                this.setState({
+                    allMessages: newMessage,
+                    players: player
+                });
             });
         })
         .catch(error => {
@@ -60,6 +78,7 @@ class Mud extends Component {
         
         let moving = this.state.messages[0].toLowerCase();
         const direction = {direction: moving};
+
         axios.post(`${url}api/adv/move`, direction, header)
             .then(response => {
                 this.setState({
@@ -89,7 +108,6 @@ class Mud extends Component {
             .then(response => {
                 const allMessages = [...this.state.allMessages];
                 allMessages.unshift(response.data);
-                console.log(response.data)
                 this.setState({
                     allMessages: allMessages, messages: ''
                 });
@@ -120,39 +138,45 @@ class Mud extends Component {
     
     render() {
         const allMessages = this.state.allMessages;
+        const name = this.state.data.name;
         return (
-            <Jumbotron style={{marginTop: '10px'}}>
-                
-                    <Alert color='success'><h2>{this.state.title}</h2></Alert>
-                    <Alert color='info'><h3>{this.state.description}</h3></Alert>
-
+            <Fragment>
+            <Navigation name={name}/>
+            <Jumbotron style={{marginTop: '10px', backgroundColor: 'rgba(255, 255, 255, 0.3)',}}>
+                    
+                    <Alert color='success'>
+                    <Label style={{color: '#183e2c', textDecoration: 'underline'}}>You are at:</Label>
+                        <h2>{this.state.title}</h2>
+                    </Alert>
+                    <Alert color='info'>{this.state.description}</Alert>
+                    <Alert style={{fontSize: '0.8rem'}} color='dark'>Players in a room: {this.state.players.join(', ')}</Alert>
                         <Form onSubmit={this.Input}>
                         <InputGroup >
                             <InputGroupAddon addonType='prepend'>Actions</InputGroupAddon>
                                 <Input
                                     type = 'text'
-                                    placeholder = 'Commands'
                                     name = 'messages'
                                     value = {this.state.messages}
                                     onChange = {this.inputChangeHandler}
                                 />
-                                <Button color='primary'>Post</Button>
+                                <Button>Post</Button>
                         </InputGroup>
                         </Form>
                         <Container style={{marginTop: '15px'}}>
-                            <h4>Messages</h4>
+                            <p style={{color: 'black'}}>Messages & Chat history</p>
                             <Card style={{maxHeight:'200px', minHeight: '50px', overflow:'auto', padding: '5px'}}>
                                 {allMessages? (
-                                    <div>
-                                    {allMessages.map((message, index) => (
+                                    
+                                    allMessages.map((message, index) => (
                                         
                                         <Message key={index} message={message}/>
-                                    ))}
-                                    </div>
+                                    ))
+                                    
                                 ) : null}
                             </Card>
                         </Container>
             </Jumbotron>
+            </Fragment>
         );
     }
 }
