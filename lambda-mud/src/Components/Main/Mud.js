@@ -6,8 +6,7 @@ import {Label, Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Car
 import Message from './Message';
 import Navigation from './Navigation';
 
-// secret = '811469b470f2e5482ac3'
-// key = '6865d3c825fc73daee61'
+// key = '6865d3c825fc73daee61' ,cluster:'US2', forceTLS:true
 Pusher.logToConsole = true;
 
 const pusherClient = new Pusher('6865d3c825fc73daee61',
@@ -150,7 +149,7 @@ class Mud extends Component {
             <Jumbotron style={{marginTop: '10px', backgroundColor: 'rgba(255, 255, 255, 0.3)',}}>
                     
                     <Alert color='success'>
-                    <Label style={{color: '#183e2c', textDecoration: 'underline'}}>You are at:</Label>
+                    <Label style={{color: '#183e2c', textDecoration: 'underline'}}>Location:</Label>
                         <h2>{this.state.title}</h2>
                     </Alert>
                     <Alert color='info'>{this.state.description}</Alert>
