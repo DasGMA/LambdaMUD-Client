@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Pusher from 'pusher-js';
 import {setPusherClient} from 'react-pusher';
-import {Label, Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Card, Container, Form} from 'reactstrap';
+import {Label, Jumbotron, Button, InputGroup, InputGroupAddon, Input, Alert, Card, Container, Form, Tooltip} from 'reactstrap';
 import Message from './Message';
 import Navigation from './Navigation';
 
@@ -26,7 +26,8 @@ class Mud extends Component {
         allPlayers: [],
         messages: '',
         allMessages: [],
-        data: []
+        data: [],
+        tooltipOpen: false
     }
 
     inputChangeHandler = event => {
@@ -135,6 +136,10 @@ class Mud extends Component {
                 this.Messaging(event)
             }
     };
+
+    tooltipToggle = () => {
+        this.setState({tooltipOpen: !this.state.tooltipOpen});
+    }
     
     render() {
         const allMessages = this.state.allMessages;
@@ -152,7 +157,11 @@ class Mud extends Component {
                     <Alert style={{fontSize: '0.8rem'}} color='dark'>Players in a room: {this.state.players.join(', ')}</Alert>
                         <Form onSubmit={this.Input}>
                         <InputGroup >
-                            <InputGroupAddon addonType='prepend'>Actions</InputGroupAddon>
+                            <InputGroupAddon addonType='prepend' id='tooltip'>Actions</InputGroupAddon>
+                            <Tooltip placement = 'top' isOpen = {this.state.tooltipOpen} target = 'tooltip' toggle={this.tooltipToggle}>
+                            Directions: n, s, e, w or respective words.
+                            Everything else will be sent as messages.
+                            </Tooltip>
                                 <Input
                                     type = 'text'
                                     name = 'messages'
