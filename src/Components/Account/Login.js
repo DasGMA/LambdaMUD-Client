@@ -56,7 +56,7 @@ class Login extends Component {
             const response = await axios.post('https://lambdamud-dasma.herokuapp.com/api/login', user);
             const token = response.data.key;
             localStorage.setItem('key', token);
-            window.location.reload();
+            window.location = '/mud';
         } catch (error) {
             console.log(error.response, 'Something went wrong.')
         }
@@ -87,7 +87,7 @@ class Login extends Component {
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="********"
+                        placeholder="Pasword"
                         value={this.state.password}
                         onChange={this.changeHandler}
                     />
